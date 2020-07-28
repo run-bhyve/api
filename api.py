@@ -23,7 +23,7 @@ def sendAdmin(msg):
 @app.route('/create/<image>')
 def create_vps(image):
     if image in ['linux']:
-        vm_ip4addr = os.popen('ssh eb@' + os.environ['HOST_SERV'] + ' sudo cbsd dhcpd').read()
+        vm_ip4addr = os.popen('ssh eb@' + os.environ['HOST_SERV'] + ' sudo cbsd dhcpd').read().rstrip()
         print(vm_ip4addr)
         vm_name = 'testname'
         with open("/root/api/jconfs/vm_linux.jconf", "rt") as fin:
