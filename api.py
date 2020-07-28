@@ -88,5 +88,16 @@ def destroy_vps(vmname):
     return jsonify(result)
 
 
+@app.route('/restart/<vmname>')
+def destroy_vps(vmname):
+    os.system('ssh eb@' + os.environ['HOST_SERV'] + ' sudo -u root cbsd brestart ' + vmname)
+
+    result = {
+        "status": "ok"
+    }
+
+    return jsonify(result)
+
+
 if __name__ == '__main__':
     app.run(debug=False, port=8080)
