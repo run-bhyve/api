@@ -52,7 +52,7 @@ def processtext(bot, update):
     text = update.message.text
     dtime = datetime.datetime.strftime(datetime.datetime.now(), '%Y-%m-%d %H:%M:%S')
     update.message.reply_text('Greetings! This bot is alive!')
-    print(dtime + " - " + str(userid) + 'sent text message')
+    print(dtime + " - " + str(userid) + ' sent text message:\n' + str(text))
 
 
 def initbot():
