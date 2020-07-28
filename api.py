@@ -1,11 +1,7 @@
 from flask import Flask, jsonify
-import requests
-import sys
-import configparser
-import threading
-import time
 import os
-import datetime
+import fileinput
+
 from tg import sendTele
 
 app = Flask(__name__)
@@ -26,14 +22,20 @@ def create_vps(image):
         vm_ip4addr = os.popen('ssh eb@' + os.environ['HOST_SERV'] + ' sudo cbsd dhcpd').read().rstrip()
         print(vm_ip4addr)
         vm_name = 'testname'
-        with open("/root/api/jconfs/vm_linux.jconf", "rt") as fin:
-            with open("/tmp/vm.jconf", "wt") as fout:
-                for line in fin:
-                    fout.write(line.replace('#IP', vm_ip4addr))
-                    print('replaced ip')
-                for line in fin:
-                    fout.write(line.replace('dumb_linux', vm_name))
-                    print('replaced name')
+
+        jconf_template = '/root/api/jconfs/vm_linux.jconf'
+        jconf_tmp = '/tmp/vm.jconf'
+
+        os.system('cp ' + jconf_template + ' ' + jconf_tmp)
+
+        with fileinput.FileInput(jconf_tmp, inplace=True) as file:
+            for line in file:
+                print(line.replace('#IP', vm_ip4addr), end='')
+
+        with fileinput.FileInput(jconf_tmp, inplace=True) as file:
+            for line in file:
+                print(line.replace('dumb_linux', vm_name), end='')
+
 
         os.system('scp /tmp/vm.jconf eb@' + os.environ['HOST_SERV'] + ':/home/eb/vm.jconf')
         os.system('ssh eb@' + os.environ['HOST_SERV'] + ' sudo -u root cbsd bcreate jconf=/home/eb/vm.jconf')
