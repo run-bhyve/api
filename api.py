@@ -27,7 +27,7 @@ def randstr(string_length=10):
 @app.route('/create/<image>/<vmname>')
 def create_vps(image, vmname):
     if image in ['linux']:
-        vm_ip4addr = os.popen('ssh eb@' + os.environ['HOST_SERV'] + ' sudo cbsd dhcpd').read().rstrip()
+        vm_ip4addr = os.popen('ssh ' + os.environ['HOST_USER'] + '@' + os.environ['HOST_SERV'] + ' sudo cbsd dhcpd').read().rstrip()
         print(vm_ip4addr)
         vm_name = vmname
 
@@ -60,9 +60,9 @@ def create_vps(image, vmname):
             for line in file:
                 print(line.replace('#VMRPWD', vm_root_pwd), end='')
 
-        os.system('scp /tmp/vm.jconf eb@' + os.environ['HOST_SERV'] + ':/home/eb/vm.jconf')
-        os.system('ssh eb@' + os.environ['HOST_SERV'] + ' sudo -u root cbsd bcreate jconf=/home/eb/vm.jconf')
-        os.system('ssh eb@' + os.environ['HOST_SERV'] + ' sudo -u root cbsd bstart ' + vm_name)
+        os.system('scp /tmp/vm.jconf ' + os.environ['HOST_USER'] + '@' + os.environ['HOST_SERV'] + ':/home/eb/vm.jconf')
+        os.system('ssh ' + os.environ['HOST_USER'] + '@' + os.environ['HOST_SERV'] + ' sudo -u root cbsd bcreate jconf=/home/eb/vm.jconf')
+        os.system('ssh ' + os.environ['HOST_USER'] + '@' + os.environ['HOST_SERV'] + ' sudo -u root cbsd bstart ' + vm_name)
 
         result = {
             "name": vm_name,
@@ -79,7 +79,7 @@ def create_vps(image, vmname):
 
 @app.route('/destroy/<vmname>')
 def destroy_vps(vmname):
-    os.system('ssh eb@' + os.environ['HOST_SERV'] + ' sudo -u root cbsd bremove ' + vmname)
+    os.system('ssh ' + os.environ['HOST_USER'] + '@' + os.environ['HOST_SERV'] + ' sudo -u root cbsd bremove ' + vmname)
 
     result = {
         "status": "ok"
@@ -90,7 +90,7 @@ def destroy_vps(vmname):
 
 @app.route('/restart/<vmname>')
 def destroy_vps(vmname):
-    os.system('ssh eb@' + os.environ['HOST_SERV'] + ' sudo -u root cbsd brestart ' + vmname)
+    os.system('ssh ' + os.environ['HOST_USER'] + '@' + os.environ['HOST_SERV'] + ' sudo -u root cbsd brestart ' + vmname)
 
     result = {
         "status": "ok"
