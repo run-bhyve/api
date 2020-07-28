@@ -62,7 +62,7 @@ def create_vps(image, vmname):
 
         os.system('scp /tmp/vm.jconf eb@' + os.environ['HOST_SERV'] + ':/home/eb/vm.jconf')
         os.system('ssh eb@' + os.environ['HOST_SERV'] + ' sudo -u root cbsd bcreate jconf=/home/eb/vm.jconf')
-        os.system('ssh eb@' + os.environ['HOST_SERV'] + ' sudo -u root cbsd bstart' + vmname)
+        os.system('ssh eb@' + os.environ['HOST_SERV'] + ' sudo -u root cbsd bstart ' + vm_name)
 
         result = {
             "name": vm_name,
