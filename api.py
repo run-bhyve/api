@@ -30,8 +30,10 @@ def create_vps(image):
             with open("/tmp/vm.jconf", "wt") as fout:
                 for line in fin:
                     fout.write(line.replace('#IP', vm_ip4addr))
+                    print('replaced ip')
                 for line in fin:
                     fout.write(line.replace('dumb_linux', vm_name))
+                    print('replaced name')
 
         os.system('scp /tmp/vm.jconf eb@' + os.environ['HOST_SERV'] + ':/home/eb/vm.jconf')
         os.system('ssh eb@' + os.environ['HOST_SERV'] + ' sudo -u root cbsd bcreate jconf=/home/eb/vm.jconf')
