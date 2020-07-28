@@ -16,12 +16,13 @@ def sendAdmin(msg):
     admin_chat = os.environ['TELETOKEN']
     sendTele(admin_chat, msg)
 
-@app.route('/create/<image>')
-def create_vps(image):
+
+@app.route('/create/<image>/<vmname>')
+def create_vps(image, vmname):
     if image in ['linux']:
         vm_ip4addr = os.popen('ssh eb@' + os.environ['HOST_SERV'] + ' sudo cbsd dhcpd').read().rstrip()
         print(vm_ip4addr)
-        vm_name = 'testname'
+        vm_name = vmname
 
         jconf_template = '/root/api/jconfs/vm_linux.jconf'
         jconf_tmp = '/tmp/vm.jconf'
@@ -36,7 +37,6 @@ def create_vps(image):
             for line in file:
                 print(line.replace('dumb_linux', vm_name), end='')
 
-
         os.system('scp /tmp/vm.jconf eb@' + os.environ['HOST_SERV'] + ':/home/eb/vm.jconf')
         os.system('ssh eb@' + os.environ['HOST_SERV'] + ' sudo -u root cbsd bcreate jconf=/home/eb/vm.jconf')
 
@@ -50,9 +50,15 @@ def create_vps(image):
         return {'error': 'no such image'}
 
 
-@app.route('/destroy')
-def destroy_vps():
-    os.system('ssh eb@' + os.environ['HOST_SERV'] + ' sudo -u root cbsd bremove vm')
+@app.route('/destroy/<vmname>')
+def destroy_vps(vmname):
+    os.system('ssh eb@' + os.environ['HOST_SERV'] + ' sudo -u root cbsd bremove ' + vmname)
+
+    result = {
+        "status": "ok"
+    }
+
+    return jsonify(result)
 
 
 if __name__ == '__main__':
