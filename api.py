@@ -89,7 +89,7 @@ def destroy_vps(vmname):
 
 
 @app.route('/restart/<vmname>')
-def destroy_vps(vmname):
+def restart_vps(vmname):
     os.system('ssh ' + os.environ['HOST_USER'] + '@' + os.environ['HOST_SERV'] + ' sudo -u root cbsd brestart ' + vmname)
 
     result = {
