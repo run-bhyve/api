@@ -1,5 +1,3 @@
-import telegram
-
 from flask import Flask, jsonify
 import requests
 import sys
@@ -8,6 +6,7 @@ import threading
 import time
 import os
 import datetime
+from tg import sendTele
 
 app = Flask(__name__)
 
@@ -18,16 +17,13 @@ teletoken=os.environ['TELETOKEN']
 
 
 def sendAdmin(msg):
-    admin_chat = '131719022'
-    bot = telegram.Bot(teletoken)
-    bot.send_message(chat_id=admin_chat, text='swapBot: ' + msg)
-
+    admin_chat = os.environ['TELETOKEN']
+    sendTele(admin_chat, msg)
 
 @app.route('/create/<image>')
 def create_vps(image):
-    if image in ['debian', 'centos', 'ubuntu', 'bitcoind', 'lightningd', 'rootshell', 'vpn', 'pay2exec']:
-
-        os.system('ssh eb@10.0.0.15 sudo -u root cbsd bcreate jconf=/usr/jails/ftmp/vm.28426.jconf')
+    if image in ['linux']:
+        os.system('ssh eb@' + os.environ['HOST_SERV'] + ' sudo -u root cbsd bcreate jconf=/usr/jails/ftmp/vm.jconf')
 
         result = {
             "host": 'test',
@@ -41,7 +37,7 @@ def create_vps(image):
 
 @app.route('/destroy')
 def destroy_vps():
-    os.system('ssh eb@10.0.0.15 sudo -u root cbsd bremove vm')
+    os.system('ssh eb@' + os.environ['HOST_SERV'] + ' sudo -u root cbsd bremove vm')
 
 
 if __name__ == '__main__':
