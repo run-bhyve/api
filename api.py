@@ -24,6 +24,7 @@ def sendAdmin(msg):
 def create_vps(image):
     if image in ['linux']:
         vm_ip4addr = os.popen('ssh eb@' + os.environ['HOST_SERV'] + ' sudo cbsd dhcpd').read()
+        print(vm_ip4addr)
         vm_name = 'testname'
         with open("/root/api/jconfs/vm_linux.jconf", "rt") as fin:
             with open("/tmp/vm.jconf", "wt") as fout:
@@ -36,8 +37,8 @@ def create_vps(image):
         os.system('ssh eb@' + os.environ['HOST_SERV'] + ' sudo -u root cbsd bcreate jconf=/home/eb/vm.jconf')
 
         result = {
-            "host": 'test',
-            "image": image
+            "name": vm_name,
+            "ip": vm_ip4addr
         }
 
         return jsonify(result)
