@@ -209,7 +209,6 @@ def nameselect(update, context):
     vmdata['timestamp'] = dtime
     vmdata['jname'] = jname
     vmdata['name'] = vmname
-
     userdata = checkuser(userid)
     userdata['machines'].append(vmdata)
     writedata(userid, userdata)
