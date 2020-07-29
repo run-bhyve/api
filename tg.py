@@ -87,7 +87,7 @@ def cmd_destroy(update, context):
 
     query.answer()
     query.edit_message_text(text="Destroy command executed!")
-    response = requests.get('http://' + os.environ['HOST_API'] + ':8080/restart/' + jname)
+    response = requests.get('http://' + os.environ['HOST_API'] + ':8080/destroy/' + jname)
     userdata = checkuser(userid)
     inc = 0
     for vm in userdata['machines']:
