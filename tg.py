@@ -205,7 +205,7 @@ def nameselect(update, context):
     response = requests.get('http://' + os.environ['HOST_API'] + ':8080/create/' + vmimage + '/' + jname)
     vmdata = response.json()
     vmdata['timestamp'] = dtime
-    vmdata['jname'] = dtime
+    vmdata['jname'] = jname
     userdata = checkuser(userid)
     userdata['machines'].append(vmdata)
     writedata(userid, userdata)
