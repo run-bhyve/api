@@ -100,7 +100,7 @@ def checkuser(uid):
 
 ### VM control
 
-def create(bot, update):
+def create(update, context):
     userid = update.message.from_user.id
     dtime = datetime.datetime.strftime(datetime.datetime.now(), '%Y-%m-%d %H:%M:%S')
 
