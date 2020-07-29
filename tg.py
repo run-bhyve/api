@@ -70,11 +70,8 @@ def machine_keyboard(uid):
 
     for vm in userdata['machines']:
 
-        keyboard.append([InlineKeyboardButton(loc, callback_data='restart-'+str(vm['name']))])
+        keyboard.append([InlineKeyboardButton(vm['name'], callback_data='restart-'+str(vm['name']))])
 
-        keyboard = [[InlineKeyboardButton('menu1', callback_data='restart-' + str(vm['name']))],
-                [InlineKeyboardButton('menu2', callback_data='vmcreate-centos')]
-                ]
     return InlineKeyboardMarkup(keyboard)
 
 
