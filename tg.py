@@ -137,7 +137,8 @@ def nameselect(update, context):
     context.user_data['vmmame'] = update.message.text
     vmimage = str(context.user_data['image']).lower()
     vmname = str(context.user_data['vmmame']).lower()
-    requests.get('http://' + os.environ['HOST_API'] + ':8080/create/' + vmimage + '/' + vmname)
+    response = requests.get('http://' + os.environ['HOST_API'] + ':8080/create/' + vmimage + '/' + vmname)
+    sendTele(userid, response.json())
     return ConversationHandler.END
 
 
