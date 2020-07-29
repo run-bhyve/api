@@ -115,7 +115,7 @@ def create(update, context):
 
 
 def imageselect(update, context):
-    user = update.message.from_user
+    userid = update.message.from_user
     update.message.reply_text('Okay, give a name for your ' + update.message.text + ' image',
                               reply_markup=ReplyKeyboardRemove())
 
@@ -123,7 +123,7 @@ def imageselect(update, context):
 
 
 def nameselect(update, context):
-    user = update.message.from_user
+    userid = update.message.from_user
     update.message.reply_text('Okay, now we will create VM. Please, wait a bit!',
                               reply_markup=ReplyKeyboardRemove())
     return ConversationHandler.END
