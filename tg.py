@@ -70,11 +70,11 @@ def cmd_restart(update, context):
     responsedata = query['data']
     m = re.search('restart-([a-z0-9_]+)', responsedata)
     jname = m.group(1)
+    query.answer()
+    query.edit_message_text(text="Restart command executed! Wait a while...")
 
     response = requests.get('http://' + os.environ['HOST_API'] + ':8080/restart/' + jname)
-    query.answer()
-    query.edit_message_text(text=response.json())
-
+    sendTele(userid, "Machine restarted!")
 
 
 def cmd_destroy(update, context):
@@ -84,10 +84,19 @@ def cmd_destroy(update, context):
     responsedata = query['data']
     m = re.search('destroy-([a-z0-9_]+)', responsedata)
     jname = m.group(1)
-    response = requests.get('http://' + os.environ['HOST_API'] + ':8080/restart/' + jname)
 
     query.answer()
-    query.edit_message_text(text=response.json())
+    query.edit_message_text(text="Destroy command executed!")
+    response = requests.get('http://' + os.environ['HOST_API'] + ':8080/restart/' + jname)
+    userdata = checkuser(userid)
+    inc = 0
+    for vm in userdata['machines']:
+        inc += 1
+        if vm['jname'] == jname:
+            todelete_index = inc
+    deleted = userdata['machines'].pop(todelete_index)
+    writedata(userid,userdata)
+    sendTele(userid, deleted['name'] + " destroyed!")
 
 
 def cmd_getinfo(update, context):
