@@ -26,7 +26,7 @@ def randstr(string_length=10):
 
 @app.route('/create/<image>/<vmname>')
 def create_vps(image, vmname):
-    if image in ['linux']:
+    if image in ['debian', 'centos']:
         vm_ip4addr = os.popen('ssh ' + os.environ['HOST_USER'] + '@' + os.environ['HOST_SERV'] + ' sudo cbsd dhcpd').read().rstrip()
         print(vm_ip4addr)
         vm_name = vmname
@@ -59,6 +59,15 @@ def create_vps(image, vmname):
         with fileinput.FileInput(jconf_tmp, inplace=True) as file:
             for line in file:
                 print(line.replace('#VMRPWD', vm_root_pwd), end='')
+
+        if image == 'debian':
+            with fileinput.FileInput(jconf_tmp, inplace=True) as file:
+                for line in file:
+                    print(line.replace('#VMPROFILE', 'cloud-Debian-x86-10'), end='')
+        elif image == 'centos':
+            with fileinput.FileInput(jconf_tmp, inplace=True) as file:
+                for line in file:
+                    print(line.replace('#VMPROFILE', 'cloud-CentOS-8.2-x86_64'), end='')
 
         os.system('scp /tmp/vm.jconf ' + os.environ['HOST_USER'] + '@' + os.environ['HOST_SERV'] + ':/home/eb/vm.jconf')
         os.system('ssh ' + os.environ['HOST_USER'] + '@' + os.environ['HOST_SERV'] + ' sudo -u root cbsd bcreate jconf=/home/eb/vm.jconf')

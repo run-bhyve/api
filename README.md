@@ -7,6 +7,7 @@ setenv HOST_SERV 10.0.0.1
 setenv HOST_USER username
 setenv TELETOKEN 123456789:AAWWA_jf2V3L1pNFrbNFrb1zoJ8UM15VIi
 setenv ADMIN_TELEGRAM
+setenv HOST_API 10.0.0.2
 ```
 
 ## API usage

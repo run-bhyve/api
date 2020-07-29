@@ -35,7 +35,7 @@ vm_ram="1g";
 # profile os type
 vm_os_type="linux";
 # vm defaults/setting profile
-vm_os_profile="cloud-Debian-x86-10";
+vm_os_profile="#VMPROFILE";
 # end of Bhyve minimal configuration
 
 emulator="bhyve";

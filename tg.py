@@ -135,7 +135,7 @@ def nameselect(update, context):
     update.message.reply_text('Okay, now we will create VM. Please, wait a bit!',
                               reply_markup=ReplyKeyboardRemove())
     context.user_data['vmmame'] = update.message.text
-    print(context.user_data)
+    requests.get('http://' + os.environ['HOST_API'] + '/create/')
     return ConversationHandler.END
 
 
