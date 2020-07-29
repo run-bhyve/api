@@ -182,10 +182,12 @@ def listvms(update, context):
     dtime = datetime.datetime.strftime(datetime.datetime.now(), '%Y-%m-%d %H:%M:%S')
     userdata = checkuser(userid)
     try:
-        print(userdata['machines'])
-        sendTele(userid, str(userdata['machines']))
+        if not userdata['machines']:
+            sendTele(userid, "You have no machines")
+        else:
+            sendTele(userid, str(userdata['machines']))
     except KeyError:
-        sendTele(userid, "You have no VMs")
+        sendTele(userid, "KeyError!")
 
 
 def initbot():
