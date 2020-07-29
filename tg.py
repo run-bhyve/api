@@ -173,8 +173,6 @@ def initbot():
 
     dp.add_handler(conv_handler)
 
-#    usertext = MessageHandler(Filters.private, processtext)
-#    userphoto = MessageHandler(Filters.photo, processphoto)
 
     updater.dispatcher.add_handler(CommandHandler('start', start))
     updater.dispatcher.add_handler(CommandHandler('myid', myid))
@@ -184,9 +182,11 @@ def initbot():
     updater.dispatcher.add_handler(CommandHandler('restart', restart))
     updater.dispatcher.add_handler(CommandHandler('list', listvms))
 
+    #    usertext = MessageHandler(Filters.private, processtext)
+    #    userphoto = MessageHandler(Filters.photo, processphoto)
 
-    dispatcher.add_handler(usertext)
-    dispatcher.add_handler(userphoto)
+    #    dispatcher.add_handler(usertext)
+    #    dispatcher.add_handler(userphoto)
 
 
 initbot()
