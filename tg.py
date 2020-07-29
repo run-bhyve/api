@@ -183,6 +183,8 @@ def listvms(update, context):
             sendTele(userid, "You have no machines")
         else:
             sendTele(userid, str(userdata['machines']))
+            update.message.reply_text('Your VMs',
+                                      reply_markup=machine_keyboard())
     except KeyError:
         sendTele(userid, "KeyError!")
 
