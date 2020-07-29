@@ -102,6 +102,8 @@ def checkuser(uid):
 
 
 def create(update, context):
+    print(context)
+
     userid = update.message.from_user.id
     dtime = datetime.datetime.strftime(datetime.datetime.now(), '%Y-%m-%d %H:%M:%S')
 
