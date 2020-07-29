@@ -5,6 +5,7 @@ import shelve
 import requests
 import datetime
 import os
+import json
 
 import logging
 
@@ -63,8 +64,15 @@ def processtext(update, context):
 
 ### Bot menus
 
-def inline_keyboard():
-    keyboard = [[InlineKeyboardButton('menu1', callback_data='vmcreate-debian')],
+def machine_keyboard(uid):
+    keyboard = list()
+    userdata = getdata(uid)
+
+    for vm in userdata['machines']:
+
+        keyboard.append([InlineKeyboardButton(loc, callback_data='restart-'+str(vm['name']))])
+
+        keyboard = [[InlineKeyboardButton('menu1', callback_data='restart-' + str(vm['name']))],
                 [InlineKeyboardButton('menu2', callback_data='vmcreate-centos')]
                 ]
     return InlineKeyboardMarkup(keyboard)
@@ -93,7 +101,7 @@ def getdata(uid):
 
 def checkuser(uid):
     if getdata(uid) == 'nodata':
-        emptydata = dict()
+        emptydata = {"machines": list()}
         writedata(uid, emptydata)
         return emptydata
     else:
@@ -131,14 +139,21 @@ def imageselect(update, context):
 
 
 def nameselect(update, context):
+    dtime = datetime.datetime.strftime(datetime.datetime.now(), '%Y-%m-%d %H:%M:%S')
+
     userid = update.message.chat.id
     update.message.reply_text('Okay, now we will create VM. Please, wait a bit!',
                               reply_markup=ReplyKeyboardRemove())
     context.user_data['vmmame'] = update.message.text
     vmimage = str(context.user_data['image']).lower()
-    vmname = str(context.user_data['vmmame']).lower()
+    vmname = 'tg' + str(userid) + '_' + (context.user_data['vmmame']).lower()
     response = requests.get('http://' + os.environ['HOST_API'] + ':8080/create/' + vmimage + '/' + vmname)
-    sendTele(userid, response.json())
+    vmdata = json.loads(response.json())
+    vmdata['timestamp'] = dtime
+    userdata = getdata(userid)
+    userdata['machines'].append(vmdata)
+    writedata(userid, userdata)
+    sendTele(userid, str(vmdata))
     return ConversationHandler.END
 
 
@@ -159,10 +174,14 @@ def restart(update, context):
     userid = update.message.from_user.id
     dtime = datetime.datetime.strftime(datetime.datetime.now(), '%Y-%m-%d %H:%M:%S')
 
+    userdata = getdata(userid)
+
 
 def listvms(update, context):
     userid = update.message.from_user.id
     dtime = datetime.datetime.strftime(datetime.datetime.now(), '%Y-%m-%d %H:%M:%S')
+    userdata = getdata(userid)
+    sendTele(userid, str(userdata['machines']))
 
 
 def initbot():
