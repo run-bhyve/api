@@ -116,7 +116,7 @@ def create(update, context):
 
     reply_keyboard = [['Debian', 'CentOS']]
 
-    update.message.reply_text('Okay, select <b>image</b>! You can also /cancel', parse_mode=ParseMode.HTML,
+    context.message.reply_text('Okay, select <b>image</b>! You can also /cancel', parse_mode=ParseMode.HTML,
                               reply_markup=ReplyKeyboardMarkup(reply_keyboard, one_time_keyboard=True))
 
     return IMAGE
