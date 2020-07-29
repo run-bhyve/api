@@ -184,7 +184,8 @@ def listvms(update, context):
     try:
         sendTele(userid, str(userdata['machines']))
     except KeyError:
-        sendTele(userid, "You have no VMs")
+        sendTele(userid, "You have no VMs"
+                 )
 
 
 def initbot():
