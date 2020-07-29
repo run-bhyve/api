@@ -63,7 +63,7 @@ def processtext(update, context):
     print(dtime + " - " + str(userid) + ' sent text message:\n' + str(text))
 
 
-def cmd_restart(bot, update):
+def cmd_restart(update, context):
     query = update.callback_query
     userid = query.message.chat_id  # need to reset previous selections
 
@@ -75,7 +75,7 @@ def cmd_restart(bot, update):
     sendTele(userid, response.json())
 
 
-def cmd_destroy(bot, update):
+def cmd_destroy(update, context):
     query = update.callback_query
     userid = query.message.chat_id  # need to reset previous selections
 
@@ -86,7 +86,7 @@ def cmd_destroy(bot, update):
     sendTele(userid, response.json())
 
 
-def cmd_getinfo(bot, update):
+def cmd_getinfo(update, context):
     query = update.callback_query
     userid = query.message.chat_id  # need to reset previous selections
 
