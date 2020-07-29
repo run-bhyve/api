@@ -121,7 +121,7 @@ def restart_keyboard(uid):
     userdata = getdata(uid)
 
     for vm in userdata['machines']:
-        keyboard.append([InlineKeyboardButton(vm['name'], callback_data='reset-'+str(vm['jname']))])
+        keyboard.append([InlineKeyboardButton(vm['name'], callback_data='restart-'+str(vm['jname']))])
 
     return InlineKeyboardMarkup(keyboard)
 
