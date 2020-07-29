@@ -184,7 +184,7 @@ def listvms(update, context):
         else:
             sendTele(userid, str(userdata['machines']))
             update.message.reply_text('Your VMs',
-                                      reply_markup=machine_keyboard())
+                                      reply_markup=machine_keyboard(userid))
     except KeyError:
         sendTele(userid, "KeyError!")
 
