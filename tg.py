@@ -102,13 +102,13 @@ def checkuser(uid):
 
 
 def create(update, context):
-    userid = update.message.chat.id
 
     print(update)
     print('\n\n')
     print(context)
     print('\n\n')
     print(userid)
+    userid = update.message.chat.id
 
     dtime = datetime.datetime.strftime(datetime.datetime.now(), '%Y-%m-%d %H:%M:%S')
 
