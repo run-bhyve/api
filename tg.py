@@ -101,13 +101,13 @@ def checkuser(uid):
 ### VM control
 
 
-def create(bot, update, context):
+def create(update, context):
 
     print(update)
     print('\n\n')
     print(context)
     print('\n\n')
-    userid = update.message.chat.id
+    userid = context.message.chat.id
     print(userid)
 
     dtime = datetime.datetime.strftime(datetime.datetime.now(), '%Y-%m-%d %H:%M:%S')
