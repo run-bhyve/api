@@ -82,7 +82,7 @@ def writedata(uid, userdata):
 def getdata(uid):
     s = shelve.open('tg_users.db')
     try:
-        userdata = s[uid]
+        userdata = s[str(uid)]
     except KeyError:
         return 'nodata'
     finally:
