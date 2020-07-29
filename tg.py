@@ -148,7 +148,7 @@ def nameselect(update, context):
     vmimage = str(context.user_data['image']).lower()
     vmname = 'tg' + str(userid) + '_' + (context.user_data['vmmame']).lower()
     response = requests.get('http://' + os.environ['HOST_API'] + ':8080/create/' + vmimage + '/' + vmname)
-    vmdata = json.loads(response.json())
+    vmdata = response.json()
     vmdata['timestamp'] = dtime
     userdata = checkuser(userid)
     userdata['machines'].append(vmdata)
