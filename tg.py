@@ -74,7 +74,7 @@ def inline_keyboard():
 def writedata(uid, userdata):
     s = shelve.open('tg_users.db')
     try:
-        s[uid] = userdata
+        s[str(uid)] = userdata
     finally:
         s.close()
 
