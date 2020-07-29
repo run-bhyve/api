@@ -100,8 +100,9 @@ def checkuser(uid):
 
 ### VM control
 
+
 def create(update, context):
-    userid = update.message.from_user
+    userid = update.message.from_user.id
     dtime = datetime.datetime.strftime(datetime.datetime.now(), '%Y-%m-%d %H:%M:%S')
 
     userdata = checkuser(userid)
@@ -115,7 +116,7 @@ def create(update, context):
 
 
 def imageselect(update, context):
-    userid = update.message.from_user
+    userid = update.message.from_user.id
     update.message.reply_text('Okay, give a name for your ' + update.message.text + ' image',
                               reply_markup=ReplyKeyboardRemove())
 
@@ -123,14 +124,14 @@ def imageselect(update, context):
 
 
 def nameselect(update, context):
-    userid = update.message.from_user
+    userid = update.message.from_user.id
     update.message.reply_text('Okay, now we will create VM. Please, wait a bit!',
                               reply_markup=ReplyKeyboardRemove())
     return ConversationHandler.END
 
 
 def cancel(update, context):
-    user = update.message.from_user
+    userid = update.message.from_user.id
     update.message.reply_text('Bye! Just type /create when you need VM',
                               reply_markup=ReplyKeyboardRemove())
 
