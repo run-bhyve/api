@@ -200,7 +200,7 @@ def nameselect(update, context):
     update.message.reply_text('Okay, now we will create VM. Please, wait a bit!',
                               reply_markup=ReplyKeyboardRemove())
     context.user_data['vmmame'] = update.message.text
-    vmname = context.user_data['vmmame']
+    vmname = update.message.text
 
     vmimage = str(context.user_data['image']).lower()
     jname = 'tg' + str(userid) + '_' + (vmname).lower()
