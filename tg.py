@@ -91,9 +91,10 @@ def cmd_destroy(update, context):
     userdata = checkuser(userid)
     inc = 0
     for vm in userdata['machines']:
-        inc += 1
         if vm['jname'] == jname:
             todelete_index = inc
+        inc += 1
+
     deleted = userdata['machines'].pop(todelete_index)
     writedata(userid,userdata)
     sendTele(userid, deleted['name'] + " destroyed!")
