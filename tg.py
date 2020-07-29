@@ -230,13 +230,29 @@ def cancel(update, context):
 def destroy(update, context):
     userid = update.message.from_user.id
     dtime = datetime.datetime.strftime(datetime.datetime.now(), '%Y-%m-%d %H:%M:%S')
+    userdata = checkuser(userid)
+    try:
+        if not userdata['machines']:
+            sendTele(userid, "You have no machines")
+        else:
+            update.message.reply_text('Your VMs',
+                                      reply_markup=destroy_keyboard(userid))
+    except KeyError:
+        sendTele(userid, "KeyError!")
 
 
 def restart(update, context):
     userid = update.message.from_user.id
     dtime = datetime.datetime.strftime(datetime.datetime.now(), '%Y-%m-%d %H:%M:%S')
-
     userdata = checkuser(userid)
+    try:
+        if not userdata['machines']:
+            sendTele(userid, "You have no machines")
+        else:
+            update.message.reply_text('Your VMs',
+                                      reply_markup=restart_keyboard(userid))
+    except KeyError:
+        sendTele(userid, "KeyError!")
 
 
 def listvms(update, context):
