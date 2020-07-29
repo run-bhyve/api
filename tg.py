@@ -32,27 +32,27 @@ def sendTele(recv, msg):
     bot.send_message(chat_id=str(recv), text=str(msg))
 
 
-def start(update: Update, context: CallbackContext):
+def start(update, context):
     userid = update.message.from_user.id
     dtime = datetime.datetime.strftime(datetime.datetime.now(), '%Y-%m-%d %H:%M:%S')
     print(dtime + " - " +str(userid) + ' started TG bot')
 
 
-def myid(update: Update, context: CallbackContext):
+def myid(update, context):
     userid = update.message.from_user.id
     dtime = datetime.datetime.strftime(datetime.datetime.now(), '%Y-%m-%d %H:%M:%S')
     update.message.reply_text('Your Telegram ID is: ' + str(userid))
     print(dtime + " - " +str(userid) + ' asked for id')
 
 
-def processphoto(update: Update, context: CallbackContext):
+def processphoto(update, context):
     userid = update.message.from_user.id
     dtime = datetime.datetime.strftime(datetime.datetime.now(), '%Y-%m-%d %H:%M:%S')
     update.message.reply_text('received image!')
     print(dtime + " - " + str(userid) + ' sent photo to bot')
 
 
-def processtext(update: Update, context: CallbackContext):
+def processtext(update, context):
     userid = update.message.from_user.id
     text = update.message.text
     dtime = datetime.datetime.strftime(datetime.datetime.now(), '%Y-%m-%d %H:%M:%S')
@@ -141,17 +141,17 @@ def cancel(update, context):
     return ConversationHandler.END
 
 
-def destroy(update: Update, context: CallbackContext):
+def destroy(update, context):
     userid = update.message.from_user.id
     dtime = datetime.datetime.strftime(datetime.datetime.now(), '%Y-%m-%d %H:%M:%S')
 
 
-def restart(update: Update, context: CallbackContext):
+def restart(update, context):
     userid = update.message.from_user.id
     dtime = datetime.datetime.strftime(datetime.datetime.now(), '%Y-%m-%d %H:%M:%S')
 
 
-def listvms(update: Update, context: CallbackContext):
+def listvms(update, context):
     userid = update.message.from_user.id
     dtime = datetime.datetime.strftime(datetime.datetime.now(), '%Y-%m-%d %H:%M:%S')
 
