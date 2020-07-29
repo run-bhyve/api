@@ -124,7 +124,7 @@ def create(update, context):
 
 def imageselect(update, context):
     userid = context.message.chat.id
-    update.message.reply_text('Okay, give a name for your ' + update.message.text + ' image',
+    context.message.reply_text('Okay, give a name for your ' + update.message.text + ' image',
                               reply_markup=ReplyKeyboardRemove())
 
     return VMNAME
@@ -132,14 +132,14 @@ def imageselect(update, context):
 
 def nameselect(update, context):
     userid = context.message.chat.id
-    update.message.reply_text('Okay, now we will create VM. Please, wait a bit!',
+    context.message.reply_text('Okay, now we will create VM. Please, wait a bit!',
                               reply_markup=ReplyKeyboardRemove())
     return ConversationHandler.END
 
 
 def cancel(update, context):
     userid = context.message.chat.id
-    update.message.reply_text('Bye! Just type /create when you need VM',
+    context.message.reply_text('Bye! Just type /create when you need VM',
                               reply_markup=ReplyKeyboardRemove())
 
     return ConversationHandler.END
