@@ -68,7 +68,7 @@ def cmd_restart(update, context):
     userid = query.message.chat_id  # need to reset previous selections
 
     responsedata = query['data']
-    m = re.search('restart-([a-z0-9]+)', responsedata)
+    m = re.search('restart-([a-z0-9_]+)', responsedata)
     jname = m.group(1)
 
     response = requests.get('http://' + os.environ['HOST_API'] + ':8080/restart/' + jname)
@@ -80,7 +80,7 @@ def cmd_destroy(update, context):
     userid = query.message.chat_id  # need to reset previous selections
 
     responsedata = query['data']
-    m = re.search('destroy-([a-z0-9]+)', responsedata)
+    m = re.search('destroy-([a-z0-9_]+)', responsedata)
     jname = m.group(1)
     response = requests.get('http://' + os.environ['HOST_API'] + ':8080/restart/' + jname)
     sendTele(userid, response.json())
@@ -91,7 +91,7 @@ def cmd_getinfo(update, context):
     userid = query.message.chat_id  # need to reset previous selections
 
     responsedata = query['data']
-    m = re.search('machine-([a-z0-9]+)', responsedata)
+    m = re.search('machine-([a-z0-9_]+)', responsedata)
     jname = m.group(1)
 
     userdata = checkuser(userid)
