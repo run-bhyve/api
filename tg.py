@@ -107,8 +107,8 @@ def create(update, context):
     print('\n\n')
     print(context)
     print('\n\n')
-    print(userid)
     userid = update.message.chat.id
+    print(userid)
 
     dtime = datetime.datetime.strftime(datetime.datetime.now(), '%Y-%m-%d %H:%M:%S')
 
