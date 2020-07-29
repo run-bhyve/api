@@ -102,7 +102,7 @@ def checkuser(uid):
 
 
 def create(update, context):
-    userid = context.message.chat.id
+    userid = update.message.chat.id
     dtime = datetime.datetime.strftime(datetime.datetime.now(), '%Y-%m-%d %H:%M:%S')
 
     userdata = checkuser(userid)
