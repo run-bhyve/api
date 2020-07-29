@@ -135,7 +135,9 @@ def nameselect(update, context):
     update.message.reply_text('Okay, now we will create VM. Please, wait a bit!',
                               reply_markup=ReplyKeyboardRemove())
     context.user_data['vmmame'] = update.message.text
-    requests.get('http://' + os.environ['HOST_API'] + '/create/')
+    vmimage = str(context.user_data['image']).lower()
+    vmname = str(context.user_data['vmmame']).lower()
+    requests.get('http://' + os.environ['HOST_API'] + ':8080/create/' + vmimage + '/' + vmname)
     return ConversationHandler.END
 
 
