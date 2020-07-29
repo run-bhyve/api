@@ -150,7 +150,7 @@ def nameselect(update, context):
     response = requests.get('http://' + os.environ['HOST_API'] + ':8080/create/' + vmimage + '/' + vmname)
     vmdata = json.loads(response.json())
     vmdata['timestamp'] = dtime
-    userdata = getdata(userid)
+    userdata = checkuser(userid)
     userdata['machines'].append(vmdata)
     writedata(userid, userdata)
     sendTele(userid, str(vmdata))
@@ -174,13 +174,13 @@ def restart(update, context):
     userid = update.message.from_user.id
     dtime = datetime.datetime.strftime(datetime.datetime.now(), '%Y-%m-%d %H:%M:%S')
 
-    userdata = getdata(userid)
+    userdata = checkuser(userid)
 
 
 def listvms(update, context):
     userid = update.message.from_user.id
     dtime = datetime.datetime.strftime(datetime.datetime.now(), '%Y-%m-%d %H:%M:%S')
-    userdata = getdata(userid)
+    userdata = checkuser(userid)
     try:
         print(userdata['machines'])
         sendTele(userid, str(userdata['machines']))
