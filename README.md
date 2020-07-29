@@ -15,7 +15,7 @@ setenv HOST_API 10.0.0.2
 Create test VM:
 
 ```
-$ curl http://API_ADDR:8080/create/linux/testname
+$ curl http://API_ADDR:8080/create/[debian|centos]/testname
 
 {
   "ip": "10.0.0.12", 
