@@ -27,6 +27,7 @@ else:
 
 IMAGE, VMNAME = range(2)
 
+
 def sendTele(recv, msg):
     bot = tgBot(teletoken)
     bot.send_message(chat_id=str(recv), text=str(msg))
@@ -104,7 +105,6 @@ def checkuser(uid):
 def create(update, context):
 
     userid = update.message.chat.id
-    print(userid)
 
     dtime = datetime.datetime.strftime(datetime.datetime.now(), '%Y-%m-%d %H:%M:%S')
 
@@ -115,6 +115,8 @@ def create(update, context):
     update.message.reply_text('Okay, select <b>image</b>! You can also /cancel', parse_mode=ParseMode.HTML,
                               reply_markup=ReplyKeyboardMarkup(reply_keyboard, one_time_keyboard=True))
 
+    context.user_data['image'] = IMAGE
+
     return IMAGE
 
 
@@ -122,6 +124,7 @@ def imageselect(update, context):
     userid = update.message.chat.id
     update.message.reply_text('Okay, give a name for your ' + update.message.text + ' image',
                               reply_markup=ReplyKeyboardRemove())
+    context.user_data['vmmame'] = VMNAME
 
     return VMNAME
 
@@ -130,6 +133,8 @@ def nameselect(update, context):
     userid = update.message.chat.id
     update.message.reply_text('Okay, now we will create VM. Please, wait a bit!',
                               reply_markup=ReplyKeyboardRemove())
+
+    print(context.user_data)
     return ConversationHandler.END
 
 
