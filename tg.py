@@ -167,7 +167,7 @@ def initbot():
         states={
             IMAGE: [MessageHandler(Filters.regex('^(Debian|CentOS)$'), imageselect)],
 
-            VMNAME: MessageHandler(Filters.text & ~Filters.command, nameselect)
+            VMNAME: [MessageHandler(Filters.text & ~Filters.command, nameselect)]
         },
 
         fallbacks=[CommandHandler('cancel', cancel)]
