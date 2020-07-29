@@ -10,7 +10,7 @@ import logging
 
 teletoken = os.environ['TELETOKEN']
 
-updater = Updater(teletoken)
+updater = Updater(teletoken, use_context=True)
 dispatcher = updater.dispatcher
 
 loglevel = "DEBUG"
@@ -103,11 +103,7 @@ def checkuser(uid):
 
 def create(update, context):
 
-    print(update)
-    print('\n\n')
-    print(context)
-    print('\n\n')
-    userid = context.message.chat.id
+    userid = update.message.chat.id
     print(userid)
 
     dtime = datetime.datetime.strftime(datetime.datetime.now(), '%Y-%m-%d %H:%M:%S')
@@ -123,7 +119,7 @@ def create(update, context):
 
 
 def imageselect(update, context):
-    userid = context.message.chat.id
+    userid = update.message.chat.id
     context.message.reply_text('Okay, give a name for your ' + update.message.text + ' image',
                               reply_markup=ReplyKeyboardRemove())
 
@@ -131,14 +127,14 @@ def imageselect(update, context):
 
 
 def nameselect(update, context):
-    userid = context.message.chat.id
+    userid = update.message.chat.id
     context.message.reply_text('Okay, now we will create VM. Please, wait a bit!',
                               reply_markup=ReplyKeyboardRemove())
     return ConversationHandler.END
 
 
 def cancel(update, context):
-    userid = context.message.chat.id
+    userid = update.message.chat.id
     context.message.reply_text('Bye! Just type /create when you need VM',
                               reply_markup=ReplyKeyboardRemove())
 
