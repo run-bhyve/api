@@ -1,4 +1,4 @@
-from telegram.ext import Updater, CommandHandler, CallbackQueryHandler, MessageHandler, Filters, RegexHandler, ConversationHandler
+from telegram.ext import Updater, CommandHandler, CallbackQueryHandler, MessageHandler, Filters, RegexHandler, ConversationHandler, CallbackContext
 from telegram import InlineKeyboardButton, InlineKeyboardMarkup, ParseMode, ReplyKeyboardRemove, ReplyKeyboardMarkup
 from telegram import Bot as tgBot
 import shelve
@@ -32,27 +32,27 @@ def sendTele(recv, msg):
     bot.send_message(chat_id=str(recv), text=str(msg))
 
 
-def start(update, context):
+def start(update: Update, context: CallbackContext):
     userid = update.message.from_user.id
     dtime = datetime.datetime.strftime(datetime.datetime.now(), '%Y-%m-%d %H:%M:%S')
     print(dtime + " - " +str(userid) + ' started TG bot')
 
 
-def myid(update, context):
+def myid(update: Update, context: CallbackContext):
     userid = update.message.from_user.id
     dtime = datetime.datetime.strftime(datetime.datetime.now(), '%Y-%m-%d %H:%M:%S')
     update.message.reply_text('Your Telegram ID is: ' + str(userid))
     print(dtime + " - " +str(userid) + ' asked for id')
 
 
-def processphoto(update, context):
+def processphoto(update: Update, context: CallbackContext):
     userid = update.message.from_user.id
     dtime = datetime.datetime.strftime(datetime.datetime.now(), '%Y-%m-%d %H:%M:%S')
     update.message.reply_text('received image!')
     print(dtime + " - " + str(userid) + ' sent photo to bot')
 
 
-def processtext(update, context):
+def processtext(update: Update, context: CallbackContext):
     userid = update.message.from_user.id
     text = update.message.text
     dtime = datetime.datetime.strftime(datetime.datetime.now(), '%Y-%m-%d %H:%M:%S')
@@ -101,7 +101,7 @@ def checkuser(uid):
 ### VM control
 
 
-def create(update, context):
+def create(update: Update, context: CallbackContext):
 
     userid = update.message.chat.id
     print(userid)
@@ -118,7 +118,7 @@ def create(update, context):
     return IMAGE
 
 
-def imageselect(update, context):
+def imageselect(update: Update, context: CallbackContext):
     userid = update.message.chat.id
     context.message.reply_text('Okay, give a name for your ' + update.message.text + ' image',
                               reply_markup=ReplyKeyboardRemove())
@@ -126,14 +126,14 @@ def imageselect(update, context):
     return VMNAME
 
 
-def nameselect(update, context):
+def nameselect(update: Update, context: CallbackContext):
     userid = update.message.chat.id
     context.message.reply_text('Okay, now we will create VM. Please, wait a bit!',
                               reply_markup=ReplyKeyboardRemove())
     return ConversationHandler.END
 
 
-def cancel(update, context):
+def cancel(update: Update, context: CallbackContext):
     userid = update.message.chat.id
     context.message.reply_text('Bye! Just type /create when you need VM',
                               reply_markup=ReplyKeyboardRemove())
@@ -141,17 +141,17 @@ def cancel(update, context):
     return ConversationHandler.END
 
 
-def destroy(update, context):
+def destroy(update: Update, context: CallbackContext):
     userid = update.message.from_user.id
     dtime = datetime.datetime.strftime(datetime.datetime.now(), '%Y-%m-%d %H:%M:%S')
 
 
-def restart(update, context):
+def restart(update: Update, context: CallbackContext):
     userid = update.message.from_user.id
     dtime = datetime.datetime.strftime(datetime.datetime.now(), '%Y-%m-%d %H:%M:%S')
 
 
-def listvms(update, context):
+def listvms(update: Update, context: CallbackContext):
     userid = update.message.from_user.id
     dtime = datetime.datetime.strftime(datetime.datetime.now(), '%Y-%m-%d %H:%M:%S')
 
