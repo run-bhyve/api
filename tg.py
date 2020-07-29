@@ -101,7 +101,7 @@ def checkuser(uid):
 ### VM control
 
 
-def create(update, context):
+def create(bot, update, context):
 
     print(update)
     print('\n\n')
