@@ -72,7 +72,9 @@ def cmd_restart(update, context):
     jname = m.group(1)
 
     response = requests.get('http://' + os.environ['HOST_API'] + ':8080/restart/' + jname)
-    sendTele(userid, response.json())
+    query.answer()
+    query.edit_message_text(text=response.json())
+
 
 
 def cmd_destroy(update, context):
@@ -83,7 +85,9 @@ def cmd_destroy(update, context):
     m = re.search('destroy-([a-z0-9_]+)', responsedata)
     jname = m.group(1)
     response = requests.get('http://' + os.environ['HOST_API'] + ':8080/restart/' + jname)
-    sendTele(userid, response.json())
+
+    query.answer()
+    query.edit_message_text(text=response.json())
 
 
 def cmd_getinfo(update, context):
@@ -98,7 +102,8 @@ def cmd_getinfo(update, context):
 
     for vm in userdata['machines']:
         if vm['jname'] == jname:
-            sendTele(userid, str(vm))
+            query.answer()
+            query.edit_message_text(text=str(vm))
 
 
 ### Bot menus
@@ -178,7 +183,6 @@ def create(update, context):
     update.message.reply_text('Okay, select <b>image</b>! You can also /cancel', parse_mode=ParseMode.HTML,
                               reply_markup=ReplyKeyboardMarkup(reply_keyboard, one_time_keyboard=True))
 
-
     return IMAGE
 
 
@@ -244,7 +248,6 @@ def listvms(update, context):
         if not userdata['machines']:
             sendTele(userid, "You have no machines")
         else:
-            sendTele(userid, str(userdata['machines']))
             update.message.reply_text('Your VMs',
                                       reply_markup=machine_keyboard(userid))
     except KeyError:
