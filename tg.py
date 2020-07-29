@@ -73,7 +73,7 @@ def inline_keyboard():
 ### DB ops
 
 def writedata(uid, userdata):
-    s = shelve.open('tg_users.db')
+    s = shelve.open('tg_users')
     try:
         s[str(uid)] = userdata
     finally:
@@ -81,7 +81,7 @@ def writedata(uid, userdata):
 
 
 def getdata(uid):
-    s = shelve.open('tg_users.db')
+    s = shelve.open('tg_users')
     try:
         userdata = s[str(uid)]
     except KeyError:
@@ -115,7 +115,6 @@ def create(update, context):
     update.message.reply_text('Okay, select <b>image</b>! You can also /cancel', parse_mode=ParseMode.HTML,
                               reply_markup=ReplyKeyboardMarkup(reply_keyboard, one_time_keyboard=True))
 
-    context.user_data['image'] = IMAGE
 
     return IMAGE
 
@@ -124,7 +123,9 @@ def imageselect(update, context):
     userid = update.message.chat.id
     update.message.reply_text('Okay, give a name for your ' + update.message.text + ' image',
                               reply_markup=ReplyKeyboardRemove())
-    context.user_data['vmmame'] = VMNAME
+
+
+    context.user_data['image'] = update.message.text
 
     return VMNAME
 
@@ -133,7 +134,7 @@ def nameselect(update, context):
     userid = update.message.chat.id
     update.message.reply_text('Okay, now we will create VM. Please, wait a bit!',
                               reply_markup=ReplyKeyboardRemove())
-
+    context.user_data['vmmame'] = update.message.text
     print(context.user_data)
     return ConversationHandler.END
 
