@@ -200,12 +200,15 @@ def nameselect(update, context):
     update.message.reply_text('Okay, now we will create VM. Please, wait a bit!',
                               reply_markup=ReplyKeyboardRemove())
     context.user_data['vmmame'] = update.message.text
+    vmname = context.user_data['vmmame']
+
     vmimage = str(context.user_data['image']).lower()
-    jname = 'tg' + str(userid) + '_' + (context.user_data['vmmame']).lower()
+    jname = 'tg' + str(userid) + '_' + (vmname).lower()
     response = requests.get('http://' + os.environ['HOST_API'] + ':8080/create/' + vmimage + '/' + jname)
     vmdata = response.json()
     vmdata['timestamp'] = dtime
     vmdata['jname'] = jname
+    vmdata['name'] = vmname
     userdata = checkuser(userid)
     userdata['machines'].append(vmdata)
     writedata(userid, userdata)
