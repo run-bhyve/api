@@ -99,10 +99,9 @@ def cmd_getinfo(update, context):
     jname = m.group(1)
 
     userdata = checkuser(userid)
-
+    query.answer()
     for vm in userdata['machines']:
         if vm['jname'] == jname:
-            query.answer()
             query.edit_message_text(text=str(vm))
 
 
