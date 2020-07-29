@@ -143,10 +143,11 @@ def nameselect(update, context):
                               reply_markup=ReplyKeyboardRemove())
     context.user_data['vmmame'] = update.message.text
     vmimage = str(context.user_data['image']).lower()
-    vmname = 'tg' + str(userid) + '_' + (context.user_data['vmmame']).lower()
-    response = requests.get('http://' + os.environ['HOST_API'] + ':8080/create/' + vmimage + '/' + vmname)
+    jname = 'tg' + str(userid) + '_' + (context.user_data['vmmame']).lower()
+    response = requests.get('http://' + os.environ['HOST_API'] + ':8080/create/' + vmimage + '/' + jname)
     vmdata = response.json()
     vmdata['timestamp'] = dtime
+    vmdata['jname'] = dtime
     userdata = checkuser(userid)
     userdata['machines'].append(vmdata)
     writedata(userid, userdata)
