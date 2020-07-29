@@ -101,7 +101,7 @@ def checkuser(uid):
 ### VM control
 
 def create(update, context):
-    userid = update.message.from_user.id
+    userid = update.message.from_user
     dtime = datetime.datetime.strftime(datetime.datetime.now(), '%Y-%m-%d %H:%M:%S')
 
     userdata = checkuser(userid)
