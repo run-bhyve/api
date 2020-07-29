@@ -25,7 +25,7 @@ else:
 
 ### Bot stuff
 
-IMAGE, VMNAME = range(4)
+IMAGE, VMNAME = range(2)
 
 def sendTele(recv, msg):
     bot = tgBot(teletoken)
