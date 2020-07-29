@@ -5,6 +5,7 @@ import shelve
 import requests
 import datetime
 import os
+import re
 import json
 
 import logging
@@ -62,17 +63,74 @@ def processtext(update, context):
     print(dtime + " - " + str(userid) + ' sent text message:\n' + str(text))
 
 
-### Bot menus
+def cmd_restart(bot, update):
+    query = update.callback_query
+    userid = query.message.chat_id  # need to reset previous selections
 
+    responsedata = query['data']
+    m = re.search('restart-([a-z0-9]+)', responsedata)
+    jname = m.group(1)
+
+    response = requests.get('http://' + os.environ['HOST_API'] + ':8080/restart/' + jname)
+    sendTele(userid, response.json())
+
+
+def cmd_destroy(bot, update):
+    query = update.callback_query
+    userid = query.message.chat_id  # need to reset previous selections
+
+    responsedata = query['data']
+    m = re.search('destroy-([a-z0-9]+)', responsedata)
+    jname = m.group(1)
+    response = requests.get('http://' + os.environ['HOST_API'] + ':8080/restart/' + jname)
+    sendTele(userid, response.json())
+
+
+def cmd_getinfo(bot, update):
+    query = update.callback_query
+    userid = query.message.chat_id  # need to reset previous selections
+
+    responsedata = query['data']
+    m = re.search('machine-([a-z0-9]+)', responsedata)
+    jname = m.group(1)
+
+    userdata = checkuser(userid)
+
+    for vm in userdata['machines']:
+        if vm['jname'] == jname:
+            sendTele(userid, str(vm))
+
+
+### Bot menus
 def machine_keyboard(uid):
     keyboard = list()
     userdata = getdata(uid)
 
     for vm in userdata['machines']:
-
-        keyboard.append([InlineKeyboardButton(vm['name'], callback_data='restart-'+str(vm['name']))])
+        keyboard.append([InlineKeyboardButton(vm['name'], callback_data='machine-'+str(vm['jname']))])
 
     return InlineKeyboardMarkup(keyboard)
+
+
+def restart_keyboard(uid):
+    keyboard = list()
+    userdata = getdata(uid)
+
+    for vm in userdata['machines']:
+        keyboard.append([InlineKeyboardButton(vm['name'], callback_data='reset-'+str(vm['jname']))])
+
+    return InlineKeyboardMarkup(keyboard)
+
+
+def destroy_keyboard(uid):
+    keyboard = list()
+    userdata = getdata(uid)
+
+    for vm in userdata['machines']:
+        keyboard.append([InlineKeyboardButton(vm['name'], callback_data='destroy-'+str(vm['jname']))])
+
+    return InlineKeyboardMarkup(keyboard)
+
 
 
 ### DB ops
@@ -219,6 +277,10 @@ def initbot():
     dp.add_handler(CommandHandler('destroy', destroy))
     dp.add_handler(CommandHandler('restart', restart))
     dp.add_handler(CommandHandler('list', listvms))
+
+    dp.add_handler(CallbackQueryHandler(cmd_restart, pattern='restart-'))
+    dp.add_handler(CallbackQueryHandler(cmd_getinfo, pattern='machine-'))
+    dp.add_handler(CallbackQueryHandler(cmd_destroy, pattern='destroy-'))
 
     #    usertext = MessageHandler(Filters.private, processtext)
     #    userphoto = MessageHandler(Filters.photo, processphoto)
