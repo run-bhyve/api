@@ -1,5 +1,5 @@
 from telegram.ext import Updater, CommandHandler, CallbackQueryHandler, MessageHandler, Filters, RegexHandler, ConversationHandler
-from telegram import InlineKeyboardButton, InlineKeyboardMarkup, ParseMode, ReplyKeyboardRemove
+from telegram import InlineKeyboardButton, InlineKeyboardMarkup, ParseMode, ReplyKeyboardRemove, ReplyKeyboardMarkup
 from telegram import Bot as tgBot
 import shelve
 import requests
@@ -24,6 +24,8 @@ else:
 
 
 ### Bot stuff
+
+IMAGE, VMNAME = range(4)
 
 def sendTele(recv, msg):
     bot = tgBot(teletoken)
@@ -60,9 +62,9 @@ def processtext(bot, update):
 
 ### Bot menus
 
-def vmimage_keyboard():
-    keyboard = [[InlineKeyboardButton('Debian', callback_data='vmcreate-debian')],
-                [InlineKeyboardButton('Centos', callback_data='vmcreate-centos')]
+def inline_keyboard():
+    keyboard = [[InlineKeyboardButton('menu1', callback_data='vmcreate-debian')],
+                [InlineKeyboardButton('menu2', callback_data='vmcreate-centos')]
                 ]
     return InlineKeyboardMarkup(keyboard)
 
@@ -103,20 +105,36 @@ def create(bot, update):
     dtime = datetime.datetime.strftime(datetime.datetime.now(), '%Y-%m-%d %H:%M:%S')
 
     userdata = checkuser(userid)
-    update.message.reply_text('Okay, select <b>image</b>!', parse_mode=ParseMode.HTML,
-                              reply_markup=vmimage_keyboard())
+
+    reply_keyboard = [['Debian', 'CentOS']]
+
+    update.message.reply_text('Okay, select <b>image</b>! You can also /cancel', parse_mode=ParseMode.HTML,
+                              reply_markup=ReplyKeyboardMarkup(reply_keyboard, one_time_keyboard=True))
 
     return IMAGE
 
 
-def vmname(update, context):
+def imageselect(update, context):
     user = update.message.from_user
-    logger.info("Gender of %s: %s", user.first_name, update.message.text)
-    update.message.reply_text('I see! Please send me a photo of yourself, '
-                              'so I know what you look like, or send /skip if you don\'t want to.',
+    update.message.reply_text('Okay, give a name for your ' + update.message.text + ' image',
                               reply_markup=ReplyKeyboardRemove())
 
-    return PHOTO
+    return VMNAME
+
+
+def nameselect(update, context):
+    user = update.message.from_user
+    update.message.reply_text('Okay, now we will create VM. Please, wait a bit!',
+                              reply_markup=ReplyKeyboardRemove())
+    return ConversationHandler.END
+
+
+def cancel(update, context):
+    user = update.message.from_user
+    update.message.reply_text('Bye! Just type /create when you need VM',
+                              reply_markup=ReplyKeyboardRemove())
+
+    return ConversationHandler.END
 
 
 def destroy(bot, update):
@@ -147,10 +165,9 @@ def initbot():
         entry_points=[CommandHandler('create', create)],
 
         states={
-            IMAGE: [MessageHandler(Filters.regex('^(Boy|Girl|Other)$'), gender)],
+            IMAGE: [MessageHandler(Filters.regex('^(Debian|CentOS)$'), imageselect)],
 
-            NAME: [MessageHandler(Filters.photo, photo),
-                    CommandHandler('skip', skip_photo)]
+            VMNAME: MessageHandler(Filters.text & ~Filters.command, nameselect)
         },
 
         fallbacks=[CommandHandler('cancel', cancel)]
