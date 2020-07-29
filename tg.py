@@ -101,7 +101,7 @@ def checkuser(uid):
 ### VM control
 
 
-def create(bot, update, context):
+def create(update, context):
     userid = update.message.from_user.id
     dtime = datetime.datetime.strftime(datetime.datetime.now(), '%Y-%m-%d %H:%M:%S')
 
@@ -175,13 +175,13 @@ def initbot():
     dp.add_handler(conv_handler)
 
 
-    updater.dispatcher.add_handler(CommandHandler('start', start))
-    updater.dispatcher.add_handler(CommandHandler('myid', myid))
+    dp.add_handler(CommandHandler('start', start))
+    dp.add_handler(CommandHandler('myid', myid))
 
     #updater.dispatcher.add_handler(CommandHandler('create', create))
-    updater.dispatcher.add_handler(CommandHandler('destroy', destroy))
-    updater.dispatcher.add_handler(CommandHandler('restart', restart))
-    updater.dispatcher.add_handler(CommandHandler('list', listvms))
+    dp.add_handler(CommandHandler('destroy', destroy))
+    dp.add_handler(CommandHandler('restart', restart))
+    dp.add_handler(CommandHandler('list', listvms))
 
     #    usertext = MessageHandler(Filters.private, processtext)
     #    userphoto = MessageHandler(Filters.photo, processphoto)
