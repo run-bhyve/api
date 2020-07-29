@@ -154,8 +154,6 @@ def listvms(bot, update):
 
 def initbot():
 
-    usertext = MessageHandler(Filters.private, processtext)
-    userphoto = MessageHandler(Filters.photo, processphoto)
 
     # Get the dispatcher to register handlers
     dp = updater.dispatcher
@@ -174,6 +172,9 @@ def initbot():
     )
 
     dp.add_handler(conv_handler)
+
+#    usertext = MessageHandler(Filters.private, processtext)
+#    userphoto = MessageHandler(Filters.photo, processphoto)
 
     updater.dispatcher.add_handler(CommandHandler('start', start))
     updater.dispatcher.add_handler(CommandHandler('myid', myid))
