@@ -1,9 +1,7 @@
 from flask import Flask, jsonify
 import os
 import fileinput
-import uuid
-from tg import sendTele
-from helpers import replace_in_file, hostcmd, hostreadcmd, scp
+from helpers import replace_in_file, hostcmd, hostreadcmd, scp, randstr
 from shutil import copyfile as cp
 import cbsd
 
@@ -11,21 +9,6 @@ app = Flask(__name__)
 
 app.config['JSONIFY_PRETTYPRINT_REGULAR'] = True
 app.url_map.strict_slashes = False
-
-teletoken=os.environ['TELETOKEN']
-
-
-def sendAdmin(msg):
-    admin_chat = os.environ['TELETOKEN']
-    sendTele(admin_chat, msg)
-
-
-def randstr(string_length=10):
-    """Returns a random string of length string_length."""
-    random = str(uuid.uuid4())
-    random = random.replace("-","")
-    return random[0:string_length]
-
 
 @app.route('/create/<image>/<vmname>')
 def create_vps(image, vmname):

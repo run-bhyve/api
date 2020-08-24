@@ -29,6 +29,9 @@ else:
 
 IMAGE, VMNAME = range(2)
 
+def sendAdmin(msg):
+    admin_chat = os.environ['TELETOKEN']
+    sendTele(admin_chat, msg)
 
 def sendTele(recv, msg):
     bot = tgBot(teletoken)
