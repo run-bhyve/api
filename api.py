@@ -3,6 +3,9 @@ import os
 import fileinput
 import uuid
 from tg import sendTele
+from helpers import replace_in_file, hostcmd, hostreadcmd, scp
+from shutil import copyfile as cp
+import cbsd
 
 app = Flask(__name__)
 
@@ -27,7 +30,7 @@ def randstr(string_length=10):
 @app.route('/create/<image>/<vmname>')
 def create_vps(image, vmname):
     if image in ['debian', 'centos']:
-        vm_ip4addr = os.popen('ssh ' + os.environ['HOST_USER'] + '@' + os.environ['HOST_SERV'] + ' sudo cbsd dhcpd').read().rstrip()
+        vm_ip4addr = hostreadcmd('sudo cbsd dhcpd')
         print(vm_ip4addr)
         vm_name = vmname
 
@@ -38,40 +41,21 @@ def create_vps(image, vmname):
         jconf_template = '/root/api/jconfs/vm_linux.jconf'
         jconf_tmp = '/tmp/vm.jconf'
 
-        os.system('cp ' + jconf_template + ' ' + jconf_tmp)
-
-        with fileinput.FileInput(jconf_tmp, inplace=True) as file:
-            for line in file:
-                print(line.replace('#IP', vm_ip4addr), end='')
-
-        with fileinput.FileInput(jconf_tmp, inplace=True) as file:
-            for line in file:
-                print(line.replace('#VMNAME', vm_name), end='')
-
-        with fileinput.FileInput(jconf_tmp, inplace=True) as file:
-            for line in file:
-                print(line.replace('#VMUSER', vm_user_name), end='')
-
-        with fileinput.FileInput(jconf_tmp, inplace=True) as file:
-            for line in file:
-                print(line.replace('#VMUPWD', vm_user_pwd), end='')
-
-        with fileinput.FileInput(jconf_tmp, inplace=True) as file:
-            for line in file:
-                print(line.replace('#VMRPWD', vm_root_pwd), end='')
+        cp(jconf_template, jconf_tmp)
+        replace_in_file(jconf_tmp,'#IP',vm_ip4addr)
+        replace_in_file(jconf_tmp,'#VMNAME',vm_name)
+        replace_in_file(jconf_tmp,'#VMUSER',vm_user_name)
+        replace_in_file(jconf_tmp,'#VMUPWD',vm_user_pwd)
+        replace_in_file(jconf_tmp,'#VMRPWD',vm_root_pwd)
 
         if image == 'debian':
-            with fileinput.FileInput(jconf_tmp, inplace=True) as file:
-                for line in file:
-                    print(line.replace('#VMPROFILE', 'cloud-Debian-x86-10'), end='')
+            replace_in_file(jconf_tmp,'#VMPROFILE','cloud-Debian-x86-10')
         elif image == 'centos':
-            with fileinput.FileInput(jconf_tmp, inplace=True) as file:
-                for line in file:
-                    print(line.replace('#VMPROFILE', 'cloud-CentOS-8.2-x86_64'), end='')
+            replace_in_file(jconf_tmp,'#VMPROFILE','cloud-CentOS-8.2-x86_64')
 
-        os.system('scp /tmp/vm.jconf ' + os.environ['HOST_USER'] + '@' + os.environ['HOST_SERV'] + ':/home/eb/vm.jconf')
-        os.system('ssh ' + os.environ['HOST_USER'] + '@' + os.environ['HOST_SERV'] + ' sudo -u root cbsd bcreate jconf=/home/eb/vm.jconf')
-        os.system('ssh ' + os.environ['HOST_USER'] + '@' + os.environ['HOST_SERV'] + ' sudo -u root cbsd bstart ' + vm_name)
+        # Create from *local* configuration file
+        cbsd.bcreate('/tmp/vm.conf')
+        cbsd.bstart(vm_name)
 
         result = {
             "name": vm_name,
@@ -87,8 +71,8 @@ def create_vps(image, vmname):
 
 
 @app.route('/destroy/<vmname>')
-def destroy_vps(vmname):
-    os.system('ssh ' + os.environ['HOST_USER'] + '@' + os.environ['HOST_SERV'] + ' sudo -u root cbsd bremove ' + vmname)
+def destroy_vps(vm_name):
+    cbsd.bremove(vm_name)
 
     result = {
         "status": "ok"
@@ -99,7 +83,7 @@ def destroy_vps(vmname):
 
 @app.route('/restart/<vmname>')
 def restart_vps(vmname):
-    os.system('ssh ' + os.environ['HOST_USER'] + '@' + os.environ['HOST_SERV'] + ' sudo -u root cbsd brestart ' + vmname)
+    cbsd.brestart(vmname)
 
     result = {
         "status": "ok"
