@@ -1,9 +1,14 @@
 import os
 import fileinput
 import uuid
+import logging
 
 def hostcmd(cmd):
-	os.system('ssh ' + os.environ['HOST_USER'] + '@' + os.environ['HOST_SERV'] + ' ' + cmd)
+    cmd = 'ssh ' + os.environ['HOST_USER'] + '@' + os.environ['HOST_SERV'] + ' ' + cmd
+    logging.info(cmd)
+    if os.environ['API_ENV'] == 'testing':
+        break
+	os.system(cmd)
 
 def scp(orig,dest):
 	os.system('scp ' + orig + ' ' + os.environ['HOST_USER'] + '@' + os.environ['HOST_SERV'] + ':' + dest)
