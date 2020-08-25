@@ -20,13 +20,13 @@ def create_vps(image, vm_name):
         vm_user_pwd = randstr()
         vm_root_pwd = randstr()
 
-        jconf_template = '/root/api/jconfs/vm_linux.jconf'
+        jconf_template = 'vm_linux.jconf'
         jconf_tmp = '/tmp/vm.jconf'
 
         if image == 'debian':
-            vm_image = 'cloud-Debian-x86-10'
+            vm_profile = 'cloud-Debian-x86-10'
         elif image == 'centos':
-            vm_image = 'cloud-CentOS-8.2-x86_64'
+            vm_profile = 'cloud-CentOS-8.2-x86_64'
 
         conf = {
             'ip': vm_ip4addr,
@@ -34,11 +34,11 @@ def create_vps(image, vm_name):
             'vm_user_name': vm_user_name,
             'vm_user_pwd': vm_user_pwd,
             'vm_root_pwd': vm_root_pwd,
-            'vm_image': image,
+            'vm_profile': vm_profile,
         }
 
         with open(jconf_tmp, "w") as f:
-            f.write(render_template(jconf_template,conf))
+            f.write(render_template(jconf_template,**conf))
 
 
         # Create from *local* configuration file
