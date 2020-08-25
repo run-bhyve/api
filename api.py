@@ -14,11 +14,6 @@ app.url_map.strict_slashes = False
 def create_vps(image, vm_name):
     if image in ['debian', 'centos']:
         vm_ip4addr = hostreadcmd('sudo cbsd dhcpd')
-        print(vm_ip4addr)
-
-        vm_user_name = 'linux'
-        vm_user_pwd = randstr()
-        vm_root_pwd = randstr()
 
         jconf_template = 'vm_linux.jconf'
         jconf_tmp = '/tmp/vm.jconf'
@@ -31,9 +26,9 @@ def create_vps(image, vm_name):
         conf = {
             'vm_name': vm_name,
             'ip': vm_ip4addr,
-            'vm_user_name': vm_user_name,
-            'vm_user_pwd': vm_user_pwd,
-            'vm_root_pwd': vm_root_pwd,
+            'vm_user_name': 'linux',
+            'vm_user_pwd': randstr(),
+            'vm_root_pwd': randstr(),
             'vm_profile': vm_profile,
         }
 
