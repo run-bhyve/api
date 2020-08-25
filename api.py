@@ -10,12 +10,11 @@ app = Flask(__name__)
 app.config['JSONIFY_PRETTYPRINT_REGULAR'] = True
 app.url_map.strict_slashes = False
 
-@app.route('/create/<image>/<vmname>')
-def create_vps(image, vmname):
+@app.route('/create/<image>/<vm_name>')
+def create_vps(image, vm_name):
     if image in ['debian', 'centos']:
         vm_ip4addr = hostreadcmd('sudo cbsd dhcpd')
         print(vm_ip4addr)
-        vm_name = vmname
 
         vm_user_name = 'linux'
         vm_user_pwd = randstr()
@@ -37,7 +36,7 @@ def create_vps(image, vmname):
             replace_in_file(jconf_tmp,'#VMPROFILE','cloud-CentOS-8.2-x86_64')
 
         # Create from *local* configuration file
-        cbsd.bcreate('/tmp/vm.conf')
+        cbsd.bcreate('/tmp/vm.jconf')
         cbsd.bstart(vm_name)
 
         result = {
@@ -53,7 +52,7 @@ def create_vps(image, vmname):
         return {'error': 'no such image'}
 
 
-@app.route('/destroy/<vmname>')
+@app.route('/destroy/<vm_name>')
 def destroy_vps(vm_name):
     cbsd.bremove(vm_name)
 
@@ -64,9 +63,9 @@ def destroy_vps(vm_name):
     return jsonify(result)
 
 
-@app.route('/restart/<vmname>')
-def restart_vps(vmname):
-    cbsd.brestart(vmname)
+@app.route('/restart/<vm_name>')
+def restart_vps(vm_name):
+    cbsd.brestart(vm_name)
 
     result = {
         "status": "ok"
