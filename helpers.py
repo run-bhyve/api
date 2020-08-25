@@ -6,7 +6,7 @@ import logging
 def hostcmd(cmd):
     cmd = 'ssh ' + os.environ['HOST_USER'] + '@' + os.environ['HOST_SERV'] + ' ' + cmd
     print(cmd)
-    if os.environ['API_ENV'] == 'testing':
+    if not os.environ['API_ENV'] == 'prod':
         return
     os.system(cmd)
 

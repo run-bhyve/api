@@ -1,4 +1,4 @@
-from flask import Flask, jsonify
+from flask import Flask, jsonify, render_template
 import os
 import fileinput
 from helpers import replace_in_file, hostcmd, hostreadcmd, scp, randstr
@@ -20,23 +20,29 @@ def create_vps(image, vm_name):
         vm_user_pwd = randstr()
         vm_root_pwd = randstr()
 
-        jconf_template = '/root/api/jconfs/vm_linux.jconf'
+        jconf_template = 'vm_linux.jconf'
         jconf_tmp = '/tmp/vm.jconf'
 
-        cp(jconf_template, jconf_tmp)
-        replace_in_file(jconf_tmp,'#IP',vm_ip4addr)
-        replace_in_file(jconf_tmp,'#VMNAME',vm_name)
-        replace_in_file(jconf_tmp,'#VMUSER',vm_user_name)
-        replace_in_file(jconf_tmp,'#VMUPWD',vm_user_pwd)
-        replace_in_file(jconf_tmp,'#VMRPWD',vm_root_pwd)
-
         if image == 'debian':
-            replace_in_file(jconf_tmp,'#VMPROFILE','cloud-Debian-x86-10')
+            vm_profile = 'cloud-Debian-x86-10'
         elif image == 'centos':
-            replace_in_file(jconf_tmp,'#VMPROFILE','cloud-CentOS-8.2-x86_64')
+            vm_profile = 'cloud-CentOS-8.2-x86_64'
+
+        conf = {
+            'ip': vm_ip4addr,
+            'vm_name': vm_name,
+            'vm_user_name': vm_user_name,
+            'vm_user_pwd': vm_user_pwd,
+            'vm_root_pwd': vm_root_pwd,
+            'vm_profile': vm_profile,
+        }
+
+        with open(jconf_tmp, "w") as f:
+            f.write(render_template(jconf_template,**conf))
+
 
         # Create from *local* configuration file
-        cbsd.bcreate('/tmp/vm.jconf')
+        cbsd.bcreate(jconf_tmp)
         cbsd.bstart(vm_name)
 
         result = {
