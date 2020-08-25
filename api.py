@@ -29,8 +29,8 @@ def create_vps(image, vm_name):
             vm_profile = 'cloud-CentOS-8.2-x86_64'
 
         conf = {
-            'ip': vm_ip4addr,
             'vm_name': vm_name,
+            'ip': vm_ip4addr,
             'vm_user_name': vm_user_name,
             'vm_user_pwd': vm_user_pwd,
             'vm_root_pwd': vm_root_pwd,
@@ -45,15 +45,7 @@ def create_vps(image, vm_name):
         cbsd.bcreate(jconf_tmp)
         cbsd.bstart(vm_name)
 
-        result = {
-            "name": vm_name,
-            "ip": vm_ip4addr,
-            "user": vm_user_name,
-            "root_pwd": vm_root_pwd,
-            "user_pwd": vm_user_pwd
-        }
-
-        return jsonify(result)
+        return jsonify(conf)
     else:
         return {'error': 'no such image'}
 
