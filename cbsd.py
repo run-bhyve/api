@@ -1,4 +1,4 @@
-from helpers import scp, hostcmd
+from helpers import hostcp, hostcmd
 
 # Create virtual machine with config `jconfig`
 def bcreate(jconf):
