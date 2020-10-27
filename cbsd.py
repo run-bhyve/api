@@ -1,7 +1,7 @@
 from helpers import scp, hostcmd
 
 def bcreate(jconf):
-	scp(jconf,'/tmp/vm.jconf')
+	hostcp(jconf,'/tmp/vm.jconf')
 	hostcmd('sudo -u root cbsd bcreate jconf=/tmp/vm.jconf')
 def bstart(vm_name):
 	hostcmd('sudo -u root cbsd bstart ' + vm_name)

@@ -10,7 +10,7 @@ def hostcmd(cmd):
         return
     os.system(cmd)
 
-def scp(orig,dest):
+def hostcp(orig,dest):
     os.system('scp ' + orig + ' ' + os.environ['HOST_USER'] + '@' + os.environ['HOST_SERV'] + ':' + dest)
 
 def hostreadcmd(cmd):
