@@ -20,7 +20,9 @@ def brestart(vm_name):
 
 # Get list of nodes
 # https://docs.python.org/2/library/sqlite3.html
-def get_nodes():
+# Получить информацию по свободным ресурсам на кластере
+# Должно возвращать свободную память, процессоры, место на диске, тип доступного диска на каждой ноде
+def get_nodes_info():
 	conn = sqlite3.connect('/db/nodes.sqlite')
 	c = conn.cursor()
 	c.execute("SELECT * FROM nodelist")
