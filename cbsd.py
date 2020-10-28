@@ -23,7 +23,7 @@ def brestart(vm_name):
 # Получить информацию по свободным ресурсам на кластере
 # Должно возвращать свободную память, процессоры, место на диске, тип доступного диска на каждой ноде
 def get_nodes_info():
-	conn = sqlite3.connect('/db/nodes.sqlite')
+	conn = sqlite3.connect('/var/db/cluster/nodes.sqlite')
 	c = conn.cursor()
 	c.execute("SELECT * FROM nodelist")
 	return c
