@@ -1,22 +1,21 @@
 from flask import render_template
 from fastapi import FastAPI
+from typing import Optional
 from helpers import hostreadcmd, randstr
 import cbsd
 from pydantic import BaseModel
 
 app = FastAPI()
 
-class VPS(BaseModel):
-    id: int
-    jname: str
+class VM(BaseModel):
+    jname: Optional[str]
     vm_cpus: int
     vm_ram: int
     imgsize: int
-    profile: str
     vm_os_profile: str
 
 @app.post('/vps/')
-def create_vps(vps: VPS):
+def create_vps(vps: VM):
     return cbsd.bcreate(vps)
 
 @app.delete('/vps/<vm_name>')

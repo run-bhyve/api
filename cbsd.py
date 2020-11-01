@@ -17,8 +17,9 @@ def cbsd_exec(subcmd, params={}):
 	#return client.put(cmd)
 
 # Create virtual machine
-def bcreate(jconf):
-	return cbsd_exec('bcreate', jconf)
+def bcreate(conf):
+	conf = conf.dict()
+	return cbsd_exec('bcreate', conf)
 
 # Start virtual machine
 def bstart(jname):
