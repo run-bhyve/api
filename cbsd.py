@@ -7,6 +7,7 @@ try:
 except Exception:
 	True
 
+# Run any command on cluster
 def cbsd_exec(subcmd, params={}):
 	if (params.jname) {
 		params.jname = 'api_' + params.jname
@@ -15,9 +16,11 @@ def cbsd_exec(subcmd, params={}):
 	cmd = json.dumps(cmd)
 	client.put(cmd)
 
+# Create virtual machine
 def bcreate(jconf):
 	cbsd_exec('bcreate', jconf)
 
+# Start virtual machine
 def bstart(jname):
 	cbsd_exec('bstart', {"jname"=jname})
 
