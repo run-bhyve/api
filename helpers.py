@@ -13,6 +13,8 @@ def hostcmd(cmd):
 def hostcp(orig,dest):
     os.system('scp ' + orig + ' ' + os.environ['HOST_USER'] + '@' + os.environ['HOST_SERV'] + ':' + dest)
 
+
+
 def hostreadcmd(cmd):
     return os.popen('ssh ' + os.environ['HOST_USER'] + '@' + os.environ['HOST_SERV'] + ' ' + cmd).read().rstrip()
 
