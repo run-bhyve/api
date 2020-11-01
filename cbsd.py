@@ -24,10 +24,10 @@ def bcreate(jconf):
 def bstart(jname):
 	return cbsd_exec('bstart', {"jname": jname})
 
-# Destroy virtual machine
-def bremove(jname):
-	return cbsd_exec('bstart', {"jname": jname})
-
 # Restart virtual machine
 def brestart(jname):
 	cbsd_exec('brestart', {"jname": jname})
+
+# Destroy virtual machine
+def bremove(jname):
+	return cbsd_exec('bremove', {"jname": jname})
