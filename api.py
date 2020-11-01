@@ -1,18 +1,23 @@
-from flask import Flask, jsonify, render_template
-import os
-import fileinput
-from helpers import replace_in_file, hostcmd, hostreadcmd, scp, randstr
-from shutil import copyfile as cp
+from flask import render_template
+from fastapi import FastAPI
+from helpers import hostreadcmd, randstr
 import cbsd
+from pydantic import BaseModel
 
-app = Flask(__name__)
 
-app.config['JSONIFY_PRETTYPRINT_REGULAR'] = True
-app.url_map.strict_slashes = False
+app = FastAPI()
 
-@app.route('/create/<image>/<vm_name>')
-def create_vps(image, vm_name):
-    if image in ['debian', 'centos']:
+class VPS(BaseModel):
+    name: str
+    price: float
+    cpu: int
+    ram: int
+    drive: int
+    profile: str
+
+@app.post('/vps/')
+def create_vps(vps: VPS):
+    if vps.profile in ['debian', 'centos']:
         vm_ip4addr = hostreadcmd('sudo cbsd dhcpd')
 
         jconf_template = 'vm_linux.jconf'
@@ -31,41 +36,21 @@ def create_vps(image, vm_name):
             'vm_root_pwd': randstr(),
             'vm_profile': vm_profile,
         }
-
         with open(jconf_tmp, "w") as f:
             f.write(render_template(jconf_template,**conf))
-
-
         # Create from *local* configuration file
         cbsd.bcreate(jconf_tmp)
         cbsd.bstart(vm_name)
-
-        return jsonify(conf)
+        return conf
     else:
         return {'error': 'no such image'}
 
-
-@app.route('/destroy/<vm_name>')
+@app.delete('/vps/<vm_name>')
 def destroy_vps(vm_name):
     cbsd.bremove(vm_name)
+    return {"status": "ok"}
 
-    result = {
-        "status": "ok"
-    }
-
-    return jsonify(result)
-
-
-@app.route('/restart/<vm_name>')
+@app.patch('/vps/<vm_name>/restart')
 def restart_vps(vm_name):
     cbsd.brestart(vm_name)
-
-    result = {
-        "status": "ok"
-    }
-
-    return jsonify(result)
-
-
-if __name__ == '__main__':
-    app.run(debug=False, port=8080)
+    return {"status": "ok"}
