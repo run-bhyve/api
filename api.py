@@ -1,7 +1,8 @@
 from fastapi import FastAPI
 from typing import Optional
-import cbsd
+import controller
 from pydantic import BaseModel
+from models import VM
 
 app = FastAPI()
 
@@ -12,14 +13,14 @@ class VM(BaseModel):
     imgsize: int
     vm_os_profile: str
 
-@app.post('/vps/')
-def create_vps(vps: VM):
-    return cbsd.bcreate(vps)
+@app.post('/vm/')
+def create_vm(vps: VM):
+    return controller.bcreate(vps)
 
-@app.delete('/vps/<vm_name>')
-def destroy_vps(vm_name):
-    return cbsd.bremove(vm_name)
+@app.delete('/vm/<jname>')
+def destroy_vm(jname):
+    return controller.bremove(jname)
 
-@app.patch('/vps/<vm_name>/restart')
-def restart_vps(vm_name):
-    return cbsd.brestart(vm_name)
+@app.patch('/vm/<jname>/restart')
+def restart_vm(jname):
+    return controller.brestart(jname)
