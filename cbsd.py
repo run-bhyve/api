@@ -1,8 +1,11 @@
 import greenstalk
 import json
 
-client = greenstalk.Client(('10.0.0.1', 11300))
-client.use('cbsd_zroot')
+try:
+	client = greenstalk.Client(('10.0.0.1', 11300))
+	client.use('cbsd_zroot')
+except Exception:
+	print("Error connecting to beanstalkd!")
 
 visual_params={"header":0}
 
