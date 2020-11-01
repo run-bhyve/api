@@ -27,7 +27,7 @@ def bstart(jname):
 
 # Restart virtual machine
 def brestart(jname):
-	cbsd_exec('brestart', {"jname": jname})
+	return cbsd_exec('brestart', {"jname": jname})
 
 # Destroy virtual machine
 def bremove(jname):
