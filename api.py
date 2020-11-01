@@ -4,7 +4,6 @@ from helpers import hostreadcmd, randstr
 import cbsd
 from pydantic import BaseModel
 
-
 app = FastAPI()
 
 class VPS(BaseModel):
