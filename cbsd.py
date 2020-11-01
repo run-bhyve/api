@@ -7,8 +7,6 @@ try:
 except Exception:
 	print("Error connecting to beanstalkd!")
 
-visual_params={"header":0}
-
 # Run any command on cluster
 def cbsd_exec(subcmd, params={}):
 	cmd = {"Command": subcmd, "CommandArgs": params}
