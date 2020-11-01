@@ -7,14 +7,22 @@ try:
 except Exception:
 	True
 
+visual_params={"header":0}
+
 # Run any command on cluster
 def cbsd_exec(subcmd, params={}):
-	if (params.jname) {
+	if params.jname:
+		# Operate only with VMs with prefix 'api_'
 		params.jname = 'api_' + params.jname
-	}
+	# Apply output format
+	params.update(visual_params)
 	cmd = {"Command": subcmd, "CommandArgs": params}
 	cmd = json.dumps(cmd)
-	client.put(cmd)
+	return client.put(cmd)
+
+# Get operation`s result
+def get_result(id):
+	True
 
 # Create virtual machine
 def bcreate(jconf):
