@@ -1,5 +1,17 @@
 from helpers import hostcp, hostcmd
-import sqlite3
+import greenstalk
+import json
+
+try:
+	client = greenstalk.Client(('10.0.0.1', 11300))
+	client.use('cbsd_zroot')
+except Exception:
+	True
+
+def exec(subcmd, params):
+	cmd = {"Command": subcmd, "CommandArgs": params}
+	cmd = json.dumps(cmd)
+	client.put(cmd)
 
 # Create virtual machine with config `jconfig`
 def bcreate(jconf):
@@ -17,13 +29,3 @@ def bremove(vm_name):
 # Restart virtual machine
 def brestart(vm_name):
 	hostcmd('sudo cbsd brestart ' + vm_name)
-
-# Get list of nodes
-# https://docs.python.org/2/library/sqlite3.html
-# Получить информацию по свободным ресурсам на кластере
-# Должно возвращать свободную память, процессоры, место на диске, тип доступного диска на каждой ноде
-def get_nodes_info():
-	conn = sqlite3.connect('/var/db/cluster/nodes.sqlite')
-	c = conn.cursor()
-	c.execute("SELECT * FROM nodelist")
-	return c
