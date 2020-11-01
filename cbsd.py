@@ -8,7 +8,7 @@ try:
 except Exception:
 	True
 
-def exec(subcmd, params):
+def exec(subcmd, params={}):
 	cmd = {"Command": subcmd, "CommandArgs": params}
 	cmd = json.dumps(cmd)
 	client.put(cmd)
