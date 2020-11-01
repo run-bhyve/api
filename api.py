@@ -1,26 +1,17 @@
 from fastapi import FastAPI
-from typing import Optional
 import controller
-from pydantic import BaseModel
 from models import VM
 
 app = FastAPI()
 
-class VM(BaseModel):
-    jname: Optional[str]
-    vm_cpus: int
-    vm_ram: int
-    imgsize: int
-    vm_os_profile: str
-
 @app.post('/vm/')
-def create_vm(vps: VM):
-    return controller.bcreate(vps)
+def create_vm(config: VM):
+    return controller.create_vm(config)
 
 @app.delete('/vm/<jname>')
-def destroy_vm(jname):
-    return controller.bremove(jname)
+def destroy_vm(gid):
+    return controller.destroy_vm(jname)
 
 @app.patch('/vm/<jname>/restart')
-def restart_vm(jname):
-    return controller.brestart(jname)
+def restart_vm(gid):
+    return controller.restart_vm(jname)
