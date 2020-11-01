@@ -1,11 +1,8 @@
 import greenstalk
 import json
 
-try:
-	client = greenstalk.Client(('10.0.0.1', 11300))
-	client.use('cbsd_zroot')
-except Exception:
-	True
+client = greenstalk.Client(('10.0.0.1', 11300))
+client.use('cbsd_zroot')
 
 visual_params={"header":0}
 
